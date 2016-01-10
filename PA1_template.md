@@ -6,13 +6,13 @@ data$date<- as.Date(data$date, "%Y-%m-%d")
 ```
 
 # What is mean total number of steps taken per day?
-1. Calculate the total number of steps taken per day
+* Calculate the total number of steps taken per day
 
 ```r
 steps_day<-tapply(data$steps, data$date, sum, na.rm=TRUE)
 ```
 
-2. Make a histogram of the total number of steps taken each day
+* Make a histogram of the total number of steps taken each day
 
 ```r
 hist(steps_day, col="red", xlab="Total steps taken per day", ylab="Frequency", main="Histogram of the total number of steps taken each day")
@@ -20,7 +20,7 @@ hist(steps_day, col="red", xlab="Total steps taken per day", ylab="Frequency", m
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
-3. Calculate and report the mean and median of the total number of steps taken per day
+* Calculate and report the mean and median of the total number of steps taken per day
 
 ```r
 m<-as.integer(mean(steps_day))
@@ -29,7 +29,7 @@ me<-as.integer(median(steps_day))
 The mean is 9354 and median is 10395.
 
 # What is the average daily activity pattern?
-1. Plot the 5-min invertal average number of steps taken
+* Plot the 5-min invertal average number of steps taken
 
 ```r
 steps_5min<-tapply(data$steps, data$interval, mean, na.rm=TRUE)
@@ -38,7 +38,7 @@ plot(names(steps_5min), steps_5min, type="l", xlab="time interval", ylab="Averag
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
-2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+* Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 ```r
 m5<-max(steps_5min)
@@ -47,14 +47,14 @@ names(steps_5min[steps_5min==m5])
 The 835th interval has the maximum steps.
 
 # Imputting missing values
-1. Calculate and report the total number of missing values in the dataset
+* Calculate and report the total number of missing values in the dataset
 
 ```r
 nrow(subset(data, is.na(data$steps)))
 ```
 There are 2304 rows missing values.
 
-2. Devise a strategy for filling in all of the missing values in the dataset.  
+* Devise a strategy for filling in all of the missing values in the dataset.  
 _Choose to use the mean of the 5min interval (acorss all days) to fill in all missing values in the dataset._
 
 ```r
@@ -63,13 +63,13 @@ data_fill<-subset(data, is.na(data$steps))
 data_fill$steps<-sapply(data_fill$interval, function(x) as.integer(steps_5min[[as.character(x)]]))
 ```
 
-3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+* Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
 ```r
 data_new<-rbind(data_fill, subset(data, !is.na(data$steps)))
 ```
 
-4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+* Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 ```r
 steps_day_new<-tapply(data_new$steps, data_new$date, sum)
@@ -82,11 +82,11 @@ hist(steps_day_new, col="blue", xlab="Total steps taken per day", ylab="Frequenc
 m_new<- as.integer(mean(steps_day_new))
 me_new<- as.integer(median(steps_day_new))
 ```
-After imputting the missing values, the mean and median total number of steps taken per day are 10749 and 10641 correspondingly, which are greater than the results in the first part.  
+After imputting the missing values, the mean and median total number of steps taken per day are 10749 and 10641 correspondingly, which are both greater than the results in the first part.  
 So, the impact is that the inputted data increased the total daily number of steps.
 
 # Are there differences in activity patterns between weekdays and weekends?
-1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+* Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
 ```r
 temp<- factor(c("weekday","weekday","weekday","weekday","weekday","weekend","weekend"))
@@ -94,7 +94,7 @@ names(temp)<-c("Mon","Tue","Wed","Tur","Fri","Sat","Sun")
 weekday_info<-temp[weekdays(data_new$date, abbreviate = TRUE)]
 data_new<-cbind(data_new, weekday_info)
 ```
-2. Make a panel plot containing a time series plot (i.e. 𝚝𝚢𝚙𝚎 = "𝚕") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).  
+* Make a panel plot containing a time series plot (i.e. 𝚝𝚢𝚙𝚎 = "𝚕") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).  
 
 
 ```r
